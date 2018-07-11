@@ -63,3 +63,31 @@ func TestNewSigmoidMF(t *testing.T) {
 		}
 	}
 }
+
+func TestNewTrapMF(t *testing.T) {
+	eps := 0.0001
+	for i, tt := range []struct {
+		a, b, c, d float64
+		u, want    []float64
+	}{
+		{
+			1, 5, 7, 10,
+			[]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			[]float64{0, 0, 0.25, 0.5, 0.75, 1, 1, 1, 0.6666, 0.3333, 0},
+		},
+	} {
+		s := NewFuzzySet(
+			tt.u,
+			NewTrapMF(tt.a, tt.b, tt.c, tt.d),
+		)
+		got := s.Grades()
+		sort.Float64s(got)
+		sort.Float64s(tt.want)
+		for j := 0; j < len(got); j++ {
+			if math.Abs(got[j]-tt.want[j]) > eps {
+				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
+				break
+			}
+		}
+	}
+}
