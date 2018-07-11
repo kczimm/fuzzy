@@ -1,1 +1,1 @@
-# fuzzy
+# fuzzy [![Coverage Status](https://coveralls.io/repos/github/kczimm/fuzzy/badge.svg?branch=master)](https://coveralls.io/github/kczimm/fuzzy?branch=master) [![GoDoc](https://godoc.org/github.com/kczimm/fuzzy?status.svg)](https://godoc.org/github.com/kczimm/fuzzy)
