@@ -5,9 +5,14 @@ import "math"
 // Membership type
 type Membership func(float64) float64
 
-// Crisp func
-func Crisp(x float64) float64 {
+// CrispMF func
+func CrispMF(x float64) float64 {
 	return 1
+}
+
+// EmptyMF func
+func EmptyMF(x float64) float64 {
+	return 0
 }
 
 // NewGaussianMF func
