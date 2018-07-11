@@ -2,7 +2,6 @@ package fuzzy
 
 import (
 	"math"
-	"sort"
 	"testing"
 )
 
@@ -24,8 +23,6 @@ func TestNewGaussianMF(t *testing.T) {
 			NewGaussianMF(tt.mu, tt.sigma),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -52,8 +49,6 @@ func TestNewGaussianComboMF(t *testing.T) {
 			NewGaussianComboMF(tt.mu1, tt.sigma1, tt.mu2, tt.sigma2),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -81,8 +76,6 @@ func TestNewSigmoidMF(t *testing.T) {
 			NewSigmoidMF(tt.a, tt.b),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -109,8 +102,6 @@ func TestNewDiffSigmoidMF(t *testing.T) {
 			NewDiffSigmoidMF(tt.a, tt.b, tt.c, tt.d),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -137,8 +128,6 @@ func TestNewTrapMF(t *testing.T) {
 			NewTrapMF(tt.a, tt.b, tt.c, tt.d),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -165,8 +154,6 @@ func TestNewTriangleMF(t *testing.T) {
 			NewTriangleMF(tt.a, tt.b, tt.c),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
@@ -193,8 +180,6 @@ func TestNewBellMF(t *testing.T) {
 			NewBellMF(tt.a, tt.b, tt.c),
 		)
 		got := s.Grades()
-		sort.Float64s(got)
-		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
 				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])

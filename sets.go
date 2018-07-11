@@ -52,10 +52,8 @@ func (s Set) Compliment() Set {
 // Grades func
 func (s Set) Grades() []float64 {
 	grades := make([]float64, len(s.data))
-	i := 0
-	for _, g := range s.data {
-		grades[i] = g
-		i++
+	for i, e := range s.Elements() {
+		grades[i] = s.data[e]
 	}
 	return grades
 }
@@ -68,13 +66,13 @@ func (s Set) Elements() []float64 {
 		e[i] = u
 		i++
 	}
+	sort.Float64s(e)
 	return e
 }
 
 func (s Set) String() string {
 	values := make([]string, len(s.data))
 	elements := s.Elements()
-	sort.Float64s(elements)
 	for i, e := range elements {
 		values[i] = fmt.Sprintf("%v/%v", s.data[e], e)
 	}
