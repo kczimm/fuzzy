@@ -15,7 +15,7 @@ type Set struct {
 // NewFuzzySet func
 func NewFuzzySet(u []float64, m Membership) Set {
 	s := Set{
-		make(map[float64]float64, len(u)),
+		make(map[float64]float64),
 		m,
 	}
 	for _, v := range u {
