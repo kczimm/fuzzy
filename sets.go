@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-// MF type
-type MF func(float64) float64
+// MembershipFunc type
+type MembershipFunc func(float64) float64
 
 // Set struct
 type Set struct {
 	data map[float64]float64
-	m    MF
+	m    MembershipFunc
 }
 
 // NewFuzzySet func
-func NewFuzzySet(u []float64, m MF) Set {
+func NewFuzzySet(u []float64, m MembershipFunc) Set {
 	s := Set{
 		make(map[float64]float64),
 		m,

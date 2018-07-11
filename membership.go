@@ -13,7 +13,7 @@ func EmptyMF(x float64) float64 {
 }
 
 // NewGaussianComboMF func
-func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) MF {
+func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) MembershipFunc {
 	if mu1 > mu2 {
 		// swap
 		mu1, mu2 = mu2, mu1
@@ -34,21 +34,21 @@ func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) MF {
 }
 
 // NewGaussianMF func
-func NewGaussianMF(mu, sigma float64) MF {
+func NewGaussianMF(mu, sigma float64) MembershipFunc {
 	return func(x float64) float64 {
 		return math.Exp(-(x - mu) * (x - mu) / (2 * sigma * sigma))
 	}
 }
 
 // NewSigmoidMF func
-func NewSigmoidMF(a, b float64) MF {
+func NewSigmoidMF(a, b float64) MembershipFunc {
 	return func(x float64) float64 {
 		return 1. / (1. + math.Exp(-a*(x-b)))
 	}
 }
 
 // NewDiffSigmoidMF func
-func NewDiffSigmoidMF(a, b, c, d float64) MF {
+func NewDiffSigmoidMF(a, b, c, d float64) MembershipFunc {
 	f := NewSigmoidMF(a, b)
 	g := NewSigmoidMF(c, d)
 	return func(x float64) float64 {
@@ -57,7 +57,7 @@ func NewDiffSigmoidMF(a, b, c, d float64) MF {
 }
 
 // NewTrapMF func
-func NewTrapMF(a, b, c, d float64) MF {
+func NewTrapMF(a, b, c, d float64) MembershipFunc {
 	return func(x float64) float64 {
 		switch {
 		case x >= a && x < b:
@@ -73,7 +73,7 @@ func NewTrapMF(a, b, c, d float64) MF {
 }
 
 // NewTriangleMF func
-func NewTriangleMF(a, b, c float64) MF {
+func NewTriangleMF(a, b, c float64) MembershipFunc {
 	return func(x float64) float64 {
 		switch {
 		case x == b:
@@ -89,7 +89,7 @@ func NewTriangleMF(a, b, c float64) MF {
 }
 
 // NewBellMF func
-func NewBellMF(a, b, c float64) MF {
+func NewBellMF(a, b, c float64) MembershipFunc {
 	return func(x float64) float64 {
 		return 1. / (1. + math.Pow(math.Abs((x-c)/a), 2*b))
 	}
