@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func ExampleFuzzySet_String() {
-	set := FuzzySet{
+func ExampleSet_String() {
+	set := Set{
 		[]float64{1, 2, 3, 4},
 		func(float64) float64 {
 			return 1
@@ -19,11 +19,11 @@ func ExampleFuzzySet_String() {
 
 func TestIsCrisp(t *testing.T) {
 	for ii, s := range []struct {
-		FuzzySet
+		Set
 		bool
 	}{
 		{
-			FuzzySet{
+			Set{
 				[]float64{0., 1.},
 				func(float64) float64 {
 					return 1
@@ -32,7 +32,7 @@ func TestIsCrisp(t *testing.T) {
 			true,
 		},
 	} {
-		got := s.FuzzySet.IsCrisp()
+		got := s.Set.IsCrisp()
 		want := s.bool
 		if got != want {
 			t.Errorf("test: %v\tset: %v\n", ii, s)
