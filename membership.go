@@ -44,3 +44,10 @@ func NewTrapMF(a, b, c, d float64) Membership {
 		}
 	}
 }
+
+// NewBellMF func
+func NewBellMF(a, b, c float64) Membership {
+	return func(x float64) float64 {
+		return 1. / (1. + math.Pow(math.Abs((x-c)/a), 2*b))
+	}
+}

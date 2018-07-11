@@ -91,3 +91,31 @@ func TestNewTrapMF(t *testing.T) {
 		}
 	}
 }
+
+func TestNewBellMF(t *testing.T) {
+	eps := 0.0001
+	for i, tt := range []struct {
+		a, b, c float64
+		u, want []float64
+	}{
+		{
+			2, 4, 6,
+			[]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			[]float64{0.0002, 0.0007, 0.0039, 0.0375, 0.5, 0.9961, 1, 0.9961, 0.5, 0.0375, 0.0039},
+		},
+	} {
+		s := NewFuzzySet(
+			tt.u,
+			NewBellMF(tt.a, tt.b, tt.c),
+		)
+		got := s.Grades()
+		sort.Float64s(got)
+		sort.Float64s(tt.want)
+		for j := 0; j < len(got); j++ {
+			if math.Abs(got[j]-tt.want[j]) > eps {
+				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
+				break
+			}
+		}
+	}
+}
