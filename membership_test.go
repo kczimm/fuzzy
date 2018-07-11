@@ -35,6 +35,34 @@ func TestNewGaussianMF(t *testing.T) {
 	}
 }
 
+func TestNewGaussianComboMF(t *testing.T) {
+	eps := 0.0001
+	for i, tt := range []struct {
+		mu1, sigma1, mu2, sigma2 float64
+		u, want                  []float64
+	}{
+		{
+			4, 2, 8, 1,
+			[]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			[]float64{0.1353, 0.3247, 0.6065, 0.8825, 1, 1, 1, 1, 1, 0.6065, 0.1353},
+		},
+	} {
+		s := NewFuzzySet(
+			tt.u,
+			NewGaussianComboMF(tt.mu1, tt.sigma1, tt.mu2, tt.sigma2),
+		)
+		got := s.Grades()
+		sort.Float64s(got)
+		sort.Float64s(tt.want)
+		for j := 0; j < len(got); j++ {
+			if math.Abs(got[j]-tt.want[j]) > eps {
+				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
+				break
+			}
+		}
+	}
+}
+
 func TestNewSigmoidMF(t *testing.T) {
 	eps := 0.0001
 	for i, tt := range []struct {
@@ -51,6 +79,34 @@ func TestNewSigmoidMF(t *testing.T) {
 		s := NewFuzzySet(
 			tt.u,
 			NewSigmoidMF(tt.a, tt.b),
+		)
+		got := s.Grades()
+		sort.Float64s(got)
+		sort.Float64s(tt.want)
+		for j := 0; j < len(got); j++ {
+			if math.Abs(got[j]-tt.want[j]) > eps {
+				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
+				break
+			}
+		}
+	}
+}
+
+func TestNewDiffSigmoidMF(t *testing.T) {
+	eps := 0.0001
+	for i, tt := range []struct {
+		a, b, c, d float64
+		u, want    []float64
+	}{
+		{
+			5, 2, 5, 7,
+			[]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			[]float64{0, 0.0067, 0.5, 0.9933, 1, 1, 0.9933, 0.5, 0.0067, 0, 0},
+		},
+	} {
+		s := NewFuzzySet(
+			tt.u,
+			NewDiffSigmoidMF(tt.a, tt.b, tt.c, tt.d),
 		)
 		got := s.Grades()
 		sort.Float64s(got)

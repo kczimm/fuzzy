@@ -15,6 +15,27 @@ func EmptyMF(x float64) float64 {
 	return 0
 }
 
+// NewGaussianComboMF func
+func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) Membership {
+	if mu1 > mu2 {
+		// swap
+		mu1, mu2 = mu2, mu1
+		sigma1, sigma2 = sigma2, sigma1
+	}
+	f := NewGaussianMF(mu1, sigma1)
+	g := NewGaussianMF(mu2, sigma2)
+	return func(x float64) float64 {
+		switch {
+		case x < mu1:
+			return f(x)
+		case x > mu2:
+			return g(x)
+		default:
+			return 1
+		}
+	}
+}
+
 // NewGaussianMF func
 func NewGaussianMF(mu, sigma float64) Membership {
 	return func(x float64) float64 {
@@ -26,6 +47,15 @@ func NewGaussianMF(mu, sigma float64) Membership {
 func NewSigmoidMF(a, b float64) Membership {
 	return func(x float64) float64 {
 		return 1. / (1. + math.Exp(-a*(x-b)))
+	}
+}
+
+// NewDiffSigmoidMF func
+func NewDiffSigmoidMF(a, b, c, d float64) Membership {
+	f := NewSigmoidMF(a, b)
+	g := NewSigmoidMF(c, d)
+	return func(x float64) float64 {
+		return f(x) - g(x)
 	}
 }
 
