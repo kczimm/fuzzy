@@ -18,9 +18,9 @@ func ExampleSet_String() {
 }
 
 func TestIsCrisp(t *testing.T) {
-	for ii, s := range []struct {
-		Set
-		bool
+	for i, tt := range []struct {
+		s     Set
+		crisp bool
 	}{
 		{
 			Set{
@@ -32,10 +32,8 @@ func TestIsCrisp(t *testing.T) {
 			true,
 		},
 	} {
-		got := s.Set.IsCrisp()
-		want := s.bool
-		if got != want {
-			t.Errorf("test: %v\tset: %v\n", ii, s)
+		if tt.s.IsCrisp() != tt.crisp {
+			t.Errorf("test: %v\tset: %v\n", i, tt.s)
 		}
 	}
 }
