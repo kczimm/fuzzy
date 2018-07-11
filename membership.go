@@ -21,3 +21,10 @@ func NewGaussianMF(mu, sigma float64) Membership {
 		return math.Exp(-(x - mu) * (x - mu) / (2 * sigma * sigma))
 	}
 }
+
+// NewSigmoidMF func
+func NewSigmoidMF(a, b float64) Membership {
+	return func(x float64) float64 {
+		return 1. / (1. + math.Exp(-a*(x-b)))
+	}
+}
