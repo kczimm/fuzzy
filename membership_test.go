@@ -2,6 +2,7 @@ package fuzzy
 
 import (
 	"math"
+	"sort"
 	"testing"
 )
 
@@ -18,14 +19,16 @@ func TestNewGaussianMF(t *testing.T) {
 			[]float64{0.0439, 0.1353, 0.3247, 0.6065, 0.8825, 1, 0.8825, 0.6065, 0.3247, 0.1353, 0.0439},
 		},
 	} {
-		s := Set{
+		s := NewFuzzySet(
 			tt.u,
 			NewGaussianMF(tt.mu, tt.sigma),
-		}
+		)
 		got := s.Grades()
+		sort.Float64s(got)
+		sort.Float64s(tt.want)
 		for j := 0; j < len(got); j++ {
 			if math.Abs(got[j]-tt.want[j]) > eps {
-				t.Errorf("test: %v got: %v want: %v\n", i, got, tt.want)
+				t.Errorf("test: %v got: %v want: %v\n", i, got[j], tt.want[j])
 				break
 			}
 		}

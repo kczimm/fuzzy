@@ -6,12 +6,7 @@ import (
 )
 
 func ExampleSet_String() {
-	set := Set{
-		[]float64{1, 2, 3, 4},
-		func(float64) float64 {
-			return 1
-		},
-	}
+	set := NewCrispSet([]float64{1, 2, 3, 4})
 	fmt.Println(set)
 	// Output:
 	// {1/1, 1/2, 1/3, 1/4}
@@ -23,12 +18,7 @@ func TestSet_IsCrisp(t *testing.T) {
 		crisp bool
 	}{
 		{
-			Set{
-				[]float64{0., 1.},
-				func(float64) float64 {
-					return 1
-				},
-			},
+			NewCrispSet([]float64{1, 2}),
 			true,
 		},
 	} {
@@ -43,19 +33,14 @@ func TestSet_Compliment(t *testing.T) {
 		s, want Set
 	}{
 		{
-			Set{
-				[]float64{1, 2, 3, 4},
-				CrispMF,
-			},
-			Set{
-				[]float64{1, 2, 3, 4},
-				EmptyMF,
-			},
+			NewCrispSet([]float64{1, 2, 3, 4}),
+			NewFuzzySet([]float64{1, 2, 3, 4}, EmptyMF),
 		},
 	} {
-		got := tt.s.Compliment()
-		for _, u := range got.U {
-			if got.m(u) != tt.want.m(u) {
+		got := tt.s.Compliment().Grades()
+		want := tt.want.Grades()
+		for j, g := range got {
+			if want[j] != g {
 				t.Errorf("test: %v got: %v want: %v\n", i, got, tt.want)
 			}
 		}
