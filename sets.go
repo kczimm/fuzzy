@@ -11,6 +11,18 @@ type Set struct {
 	m Membership
 }
 
+// Compliment method
+func (s Set) Compliment() Set {
+	u := make([]float64, len(s.U))
+	copy(u, s.U)
+	return Set{
+		u,
+		func(x float64) float64 {
+			return 1 - s.m(x)
+		},
+	}
+}
+
 // Grades func
 func (s Set) Grades() []float64 {
 	g := make([]float64, len(s.U))
@@ -36,7 +48,7 @@ func (s Set) AlphaCut(alpha float64) *Set {
 			U = append(U, u)
 		}
 	}
-	return &Set{U, Crisp}
+	return &Set{U, CrispMF}
 }
 
 // StrongAlphaCut func
@@ -47,7 +59,7 @@ func (s Set) StrongAlphaCut(alpha float64) *Set {
 			U = append(U, u)
 		}
 	}
-	return &Set{U, Crisp}
+	return &Set{U, CrispMF}
 }
 
 // Support func
@@ -58,7 +70,7 @@ func (s Set) Support() *Set {
 			U = append(U, u)
 		}
 	}
-	return &Set{U, Crisp}
+	return &Set{U, CrispMF}
 }
 
 // Core func
@@ -69,7 +81,7 @@ func (s Set) Core() *Set {
 			U = append(U, u)
 		}
 	}
-	return &Set{U, Crisp}
+	return &Set{U, CrispMF}
 }
 
 // IsCrisp func
