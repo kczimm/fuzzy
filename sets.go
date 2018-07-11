@@ -6,14 +6,17 @@ import (
 	"strings"
 )
 
+// MF type
+type MF func(float64) float64
+
 // Set struct
 type Set struct {
 	data map[float64]float64
-	m    Membership
+	m    MF
 }
 
 // NewFuzzySet func
-func NewFuzzySet(u []float64, m Membership) Set {
+func NewFuzzySet(u []float64, m MF) Set {
 	s := Set{
 		make(map[float64]float64),
 		m,
@@ -33,7 +36,7 @@ func NewCrispSet(u []float64) Set {
 func (s *Set) AddElement(x float64) {
 	g := s.m(x)
 	if g < 0 || g > 1 {
-		panic("membership function returned a grade outside the interval [0, 1]")
+		panic("MF function returned a grade outside the interval [0, 1]")
 	}
 	s.data[x] = s.m(x)
 }

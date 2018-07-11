@@ -2,9 +2,6 @@ package fuzzy
 
 import "math"
 
-// Membership type
-type Membership func(float64) float64
-
 // CrispMF func
 func CrispMF(x float64) float64 {
 	return 1
@@ -16,7 +13,7 @@ func EmptyMF(x float64) float64 {
 }
 
 // NewGaussianComboMF func
-func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) Membership {
+func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) MF {
 	if mu1 > mu2 {
 		// swap
 		mu1, mu2 = mu2, mu1
@@ -37,21 +34,21 @@ func NewGaussianComboMF(mu1, sigma1, mu2, sigma2 float64) Membership {
 }
 
 // NewGaussianMF func
-func NewGaussianMF(mu, sigma float64) Membership {
+func NewGaussianMF(mu, sigma float64) MF {
 	return func(x float64) float64 {
 		return math.Exp(-(x - mu) * (x - mu) / (2 * sigma * sigma))
 	}
 }
 
 // NewSigmoidMF func
-func NewSigmoidMF(a, b float64) Membership {
+func NewSigmoidMF(a, b float64) MF {
 	return func(x float64) float64 {
 		return 1. / (1. + math.Exp(-a*(x-b)))
 	}
 }
 
 // NewDiffSigmoidMF func
-func NewDiffSigmoidMF(a, b, c, d float64) Membership {
+func NewDiffSigmoidMF(a, b, c, d float64) MF {
 	f := NewSigmoidMF(a, b)
 	g := NewSigmoidMF(c, d)
 	return func(x float64) float64 {
@@ -60,7 +57,7 @@ func NewDiffSigmoidMF(a, b, c, d float64) Membership {
 }
 
 // NewTrapMF func
-func NewTrapMF(a, b, c, d float64) Membership {
+func NewTrapMF(a, b, c, d float64) MF {
 	return func(x float64) float64 {
 		switch {
 		case x >= a && x < b:
@@ -76,7 +73,7 @@ func NewTrapMF(a, b, c, d float64) Membership {
 }
 
 // NewTriangleMF func
-func NewTriangleMF(a, b, c float64) Membership {
+func NewTriangleMF(a, b, c float64) MF {
 	return func(x float64) float64 {
 		switch {
 		case x == b:
@@ -92,7 +89,7 @@ func NewTriangleMF(a, b, c float64) Membership {
 }
 
 // NewBellMF func
-func NewBellMF(a, b, c float64) Membership {
+func NewBellMF(a, b, c float64) MF {
 	return func(x float64) float64 {
 		return 1. / (1. + math.Pow(math.Abs((x-c)/a), 2*b))
 	}
