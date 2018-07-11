@@ -34,11 +34,27 @@ func NewTrapMF(a, b, c, d float64) Membership {
 	return func(x float64) float64 {
 		switch {
 		case x >= a && x < b:
-			return 1 / (b - a) * (x - a)
+			return (x - a) / (b - a)
 		case x >= b && x < c:
 			return 1
 		case x >= c && x < d:
-			return 1 / (c - d) * (x - d)
+			return (x - d) / (c - d)
+		default:
+			return 0
+		}
+	}
+}
+
+// NewTriangleMF func
+func NewTriangleMF(a, b, c float64) Membership {
+	return func(x float64) float64 {
+		switch {
+		case x == b:
+			return 1
+		case x >= a && x < b:
+			return (x - a) / (b - a)
+		case x > b && x < c:
+			return (x - b) / (c - b)
 		default:
 			return 0
 		}
