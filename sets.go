@@ -129,7 +129,7 @@ func (s Set) Core() Set {
 // IsCrisp func
 func (s Set) IsCrisp() bool {
 	for _, g := range s.data {
-		if g != 1 {
+		if g != 1 && g != 0 {
 			return false
 		}
 	}
