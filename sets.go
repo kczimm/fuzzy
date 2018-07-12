@@ -57,6 +57,16 @@ func (s *Set) AddElement(u, g float64) {
 	s.data[u] = g
 }
 
+// Centroid method
+func (s Set) Centroid() float64 {
+	c, G := 0., 0.
+	for u, g := range s.data {
+		c += u * g
+		G += g
+	}
+	return c / G
+}
+
 // Compliment method
 func (s Set) Compliment() Set {
 	c := NewCrispSet(s.Elements())
