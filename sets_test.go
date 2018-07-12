@@ -57,6 +57,69 @@ func TestSet_IsCrisp(t *testing.T) {
 	}
 }
 
+func TestSet_IsEqual(t *testing.T) {
+	for i, tt := range []struct {
+		a, b Set
+		want bool
+	}{
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+			true,
+		},
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewFuzzySet([]float64{1, 2}, CrispMF),
+			true,
+		},
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewFuzzySet([]float64{1, 2}, EmptyMF),
+			false,
+		},
+		{
+			NewCrispSet([]float64{1, 2, 3}),
+			NewCrispSet([]float64{1, 2}),
+			false,
+		},
+	} {
+		got := tt.a.IsEqual(tt.b)
+		if tt.want != got {
+			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
+		}
+	}
+}
+
+func TestSet_AlphaCut(t *testing.T) {
+	for i, tt := range []struct {
+		s, want Set
+		alpha   float64
+	}{
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+			0.5,
+		},
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+			1.0,
+		},
+		{
+			NewFuzzySet([]float64{1, 2}, func(x float64) float64 {
+				return 0.5
+			}),
+			NewFuzzySet([]float64{}, EmptyMF),
+			0.6,
+		},
+	} {
+		got := tt.s.AlphaCut(tt.alpha)
+		if !tt.want.IsEqual(got) {
+			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
+		}
+	}
+}
+
 func TestSet_IsEmpty(t *testing.T) {
 	for i, tt := range []struct {
 		s     Set

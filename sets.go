@@ -73,6 +73,17 @@ func (s Set) Elements() []float64 {
 	return e
 }
 
+// IsEqual func
+func (s Set) IsEqual(other Set) bool {
+	for e := range s.data {
+		g, exists := other.data[e]
+		if !exists || g != s.data[e] {
+			return false
+		}
+	}
+	return true
+}
+
 func (s Set) String() string {
 	values := make([]string, len(s.data))
 	elements := s.Elements()
@@ -85,9 +96,9 @@ func (s Set) String() string {
 // AlphaCut func
 func (s Set) AlphaCut(alpha float64) Set {
 	U := make([]float64, 0)
-	for _, g := range s.data {
+	for e, g := range s.data {
 		if g >= alpha {
-			U = append(U, g)
+			U = append(U, e)
 		}
 	}
 	return NewCrispSet(U)
