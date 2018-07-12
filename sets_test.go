@@ -5,19 +5,53 @@ import (
 	"testing"
 )
 
-func ExampleSet_String() {
-	a := NewCrispSet([]float64{1, 2, 3, 4})
-	fmt.Println(a)
-	b := NewFuzzySetFromMF([]float64{1, 2, 3, 4}, EmptyMF)
-	fmt.Println(b)
-	c := NewFuzzySetFromMF([]float64{1, 2, 3, 4}, func(x float64) float64 {
-		return 0.5
-	})
-	fmt.Println(c)
+func ExampleNewEmptySet() {
+	s := NewEmptySet()
+
+	fmt.Println(s)
+	// Output:
+	// {}
+}
+
+func ExampleNewCrispSet() {
+	s := NewCrispSet([]float64{1, 2, 3, 4})
+
+	fmt.Println(s)
 	// Output:
 	// {1/1, 1/2, 1/3, 1/4}
+}
+
+func ExampleNewFuzzySet() {
+	s := NewFuzzySet([]float64{1, 2, 3, 4}, []float64{0.1, 0.2, 0.3, 0.4})
+
+	fmt.Println(s)
+	// Output:
+	// {0.1/1, 0.2/2, 0.3/3, 0.4/4}
+}
+
+func ExampleNewFuzzySetFromMF() {
+	a := NewFuzzySetFromMF([]float64{1, 2, 3, 4}, EmptyMF)
+	b := NewFuzzySetFromMF([]float64{1, 2, 3, 4}, CrispMF)
+	c := NewFuzzySetFromMF(
+		[]float64{1, 2, 3, 4},
+		func(x float64) float64 {
+			return 0.5
+		},
+	)
+	d := NewFuzzySetFromMF(
+		[]float64{0, 1, 2, 3, 4, 5},
+		NewTrapMF(0, 2, 3, 5),
+	)
+
+	fmt.Println(a)
+	fmt.Println(b)
+	fmt.Println(c)
+	fmt.Println(d)
+	// Output:
 	// {0/1, 0/2, 0/3, 0/4}
+	// {1/1, 1/2, 1/3, 1/4}
 	// {0.5/1, 0.5/2, 0.5/3, 0.5/4}
+	// {0/0, 0.5/1, 1/2, 1/3, 0.5/4, 0/5}
 }
 
 func TestSet_AddElement(t *testing.T) {
