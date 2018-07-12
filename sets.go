@@ -107,9 +107,9 @@ func (s Set) AlphaCut(alpha float64) Set {
 // StrongAlphaCut func
 func (s Set) StrongAlphaCut(alpha float64) Set {
 	U := make([]float64, 0)
-	for _, g := range s.data {
+	for e, g := range s.data {
 		if g > alpha {
-			U = append(U, g)
+			U = append(U, e)
 		}
 	}
 	return NewCrispSet(U)

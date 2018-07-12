@@ -109,11 +109,55 @@ func TestSet_AlphaCut(t *testing.T) {
 			NewFuzzySet([]float64{1, 2}, func(x float64) float64 {
 				return 0.5
 			}),
+			NewCrispSet([]float64{1, 2}),
+			0.5,
+		},
+		{
+			NewFuzzySet([]float64{1, 2}, func(x float64) float64 {
+				return 0.5
+			}),
 			NewFuzzySet([]float64{}, EmptyMF),
 			0.6,
 		},
 	} {
 		got := tt.s.AlphaCut(tt.alpha)
+		if !tt.want.IsEqual(got) {
+			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
+		}
+	}
+}
+
+func TestSet_StrongAlphaCut(t *testing.T) {
+	for i, tt := range []struct {
+		s, want Set
+		alpha   float64
+	}{
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+			0.5,
+		},
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{}),
+			1.0,
+		},
+		{
+			NewFuzzySet([]float64{1, 2}, func(x float64) float64 {
+				return 0.5
+			}),
+			NewCrispSet([]float64{}),
+			0.5,
+		},
+		{
+			NewFuzzySet([]float64{1, 2}, func(x float64) float64 {
+				return 0.5
+			}),
+			NewFuzzySet([]float64{}, EmptyMF),
+			0.6,
+		},
+	} {
+		got := tt.s.StrongAlphaCut(tt.alpha)
 		if !tt.want.IsEqual(got) {
 			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
 		}
