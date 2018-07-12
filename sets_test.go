@@ -90,6 +90,38 @@ func TestSet_IsEqual(t *testing.T) {
 	}
 }
 
+func TestSet_Core(t *testing.T) {
+	for i, tt := range []struct {
+		s, want Set
+	}{
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+		},
+	} {
+		got := tt.s.Core()
+		if !tt.want.IsEqual(got) {
+			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
+		}
+	}
+}
+
+func TestSet_Support(t *testing.T) {
+	for i, tt := range []struct {
+		s, want Set
+	}{
+		{
+			NewCrispSet([]float64{1, 2}),
+			NewCrispSet([]float64{1, 2}),
+		},
+	} {
+		got := tt.s.Support()
+		if !tt.want.IsEqual(got) {
+			t.Errorf("test: %v got: %v want: %v", i, got, tt.want)
+		}
+	}
+}
+
 func TestSet_AlphaCut(t *testing.T) {
 	for i, tt := range []struct {
 		s, want Set

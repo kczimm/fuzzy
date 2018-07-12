@@ -118,9 +118,9 @@ func (s Set) StrongAlphaCut(alpha float64) Set {
 // Support func
 func (s Set) Support() Set {
 	U := make([]float64, 0)
-	for _, g := range s.data {
+	for e, g := range s.data {
 		if g > 0 {
-			U = append(U, g)
+			U = append(U, e)
 		}
 	}
 	return NewCrispSet(U)
@@ -129,9 +129,9 @@ func (s Set) Support() Set {
 // Core func
 func (s Set) Core() Set {
 	U := make([]float64, 0)
-	for _, g := range s.data {
+	for e, g := range s.data {
 		if g == 1 {
-			U = append(U, g)
+			U = append(U, e)
 		}
 	}
 	return NewCrispSet(U)
