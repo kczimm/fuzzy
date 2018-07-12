@@ -12,44 +12,96 @@ type MembershipFunc func(float64) float64
 // Set struct
 type Set struct {
 	data map[float64]float64
-	m    MembershipFunc
+}
+
+// NewEmptySet func
+func NewEmptySet() Set {
+	return Set{
+		make(map[float64]float64),
+	}
 }
 
 // NewFuzzySet func
-func NewFuzzySet(u []float64, m MembershipFunc) Set {
+func NewFuzzySet(u, g []float64) Set {
+	if len(u) != len(g) {
+		panic("elements and grades have different lengths")
+	}
+	s := NewEmptySet()
+	for i, v := range u {
+		s.AddElement(v, g[i])
+	}
+	return s
+}
+
+// NewFuzzySetFromMF func
+func NewFuzzySetFromMF(u []float64, m MembershipFunc) Set {
 	s := Set{
 		make(map[float64]float64),
-		m,
 	}
 	for _, v := range u {
-		s.AddElement(v)
+		s.AddElement(v, m(v))
 	}
 	return s
 }
 
 // NewCrispSet func
 func NewCrispSet(u []float64) Set {
-	return NewFuzzySet(u, CrispMF)
+	return NewFuzzySetFromMF(u, CrispMF)
 }
 
 // AddElement method
-func (s *Set) AddElement(x float64) {
-	g := s.m(x)
+func (s *Set) AddElement(u, g float64) {
 	if g < 0 || g > 1 {
-		panic("MF function returned a grade outside the interval [0, 1]")
+		panic("grade outside the interval [0, 1]")
 	}
-	s.data[x] = s.m(x)
+	s.data[u] = g
 }
 
 // Compliment method
 func (s Set) Compliment() Set {
-	U := s.Elements()
-	return NewFuzzySet(
-		U,
-		func(x float64) float64 {
-			return 1 - s.m(x)
-		},
-	)
+	c := NewCrispSet(s.Elements())
+	for k, v := range c.data {
+		c.data[k] = 1 - v
+	}
+	return c
+}
+
+// Intersection method
+func (s Set) Intersection(other Set) Set {
+	n := NewEmptySet()
+	for k, v := range s.data {
+		g, exists := other.data[k]
+		if exists {
+			if g < v {
+				n.AddElement(k, g)
+			} else {
+				n.AddElement(k, v)
+			}
+		}
+	}
+	return n
+}
+
+// Union method
+func (s Set) Union(other Set) Set {
+	n := NewEmptySet()
+	for k, v := range s.data {
+		g, exists := other.data[k]
+		if exists && g > v {
+			n.AddElement(k, g)
+		} else {
+			n.AddElement(k, v)
+		}
+	}
+	for k, v := range other.data {
+		g, exists := s.data[k]
+		if exists && g > v {
+			n.AddElement(k, g)
+		} else {
+			n.AddElement(k, v)
+		}
+	}
+	return n
 }
 
 // Grades func
@@ -59,6 +111,15 @@ func (s Set) Grades() []float64 {
 		grades[i] = s.data[e]
 	}
 	return grades
+}
+
+// Grade method
+func (s Set) Grade(u float64) float64 {
+	g, exists := s.data[u]
+	if !exists {
+		return 0
+	}
+	return g
 }
 
 // Elements func
